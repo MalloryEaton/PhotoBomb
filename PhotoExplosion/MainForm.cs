@@ -58,7 +58,8 @@ namespace PhotoExplosion
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            AboutForm aboutBox = new AboutForm();
+            aboutBox.ShowDialog(this);
         }
 
         private void locateToolStripMenuItem_Click(object sender, EventArgs e)
