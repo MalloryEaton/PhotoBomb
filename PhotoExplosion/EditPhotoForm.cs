@@ -16,5 +16,16 @@ namespace PhotoExplosion
         {
             InitializeComponent();
         }
+
+        private void EditPhotoForm_Resize(object sender, EventArgs e)
+        {
+            Image.Size = new Size(Width - 40, Height - 200);
+            ControlsGroupBox.Size = new Size(Width - 40, ControlsGroupBox.Height);
+        }
+
+        private void ColorButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = colorDialog.ShowDialog();
+        }
     }
 }

@@ -171,6 +171,12 @@ namespace PhotoExplosion
         {
             if (e.Cancelled) { }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            EditPhotoForm editForm = new EditPhotoForm();
+            DialogResult result = editForm.ShowDialog(this);
+        }
     }
 
     /*if (backgroundWorker1.WorkerSupportsCancellation)
