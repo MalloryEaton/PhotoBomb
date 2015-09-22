@@ -26,6 +26,7 @@ namespace PhotoExplosion
         {
             treeView.Nodes.Clear();
 
+            //ImageList imageList = new ImageList();
             var stack = new Stack<TreeNode>();
             var rootDirectory = new DirectoryInfo(path);
             var node = new TreeNode(rootDirectory.Name) { Tag = rootDirectory };
@@ -43,15 +44,13 @@ namespace PhotoExplosion
                 }
                 
                 
-                //foreach (var file in directoryInfo.GetFiles())
-                //    currentNode.Nodes.Add(new TreeNode(file.Name));
+                /*foreach (var file in directoryInfo.GetFiles())
+                    imageList.Images.Add(new Bitmap(file.GetType(), 32x32));
+                */
             }
             
             if (!photoLoaderBW.IsBusy)
-            {
-                photoList.SmallImageList = new ImageList();
                 photoLoaderBW.RunWorkerAsync();
-            }
 
             treeView.Nodes.Add(node);
         }
@@ -96,6 +95,14 @@ namespace PhotoExplosion
         {
             string directory = currentDirectory.Substring(3);
             DirectoryInfo homeDir = new DirectoryInfo(currentDirectory);
+
+            ImageList smallimageList = new ImageList();
+            smallimageList.ImageSize = new Size(45,40);
+            ImageList largeimageList = new ImageList();
+            largeimageList.ImageSize = new Size(90, 80);
+
+            SetImageList(smallimageList, largeimageList);
+
             foreach (FileInfo file in homeDir.GetFiles())
             {
                 try
@@ -105,10 +112,7 @@ namespace PhotoExplosion
                         byte[] bytes = File.ReadAllBytes(file.FullName);
                         MemoryStream ms = new MemoryStream(bytes);
                         Image img = Image.FromStream(ms);
-                        AddToPhotoListView(img);
-                        Console.WriteLine("Filename: " + file.Name);
-                        Console.WriteLine("Last mod: " + file.LastWriteTime.ToString());
-                        Console.WriteLine("File size: " + file.Length);
+                        AddToPhotoListView(file.Name, file.FullName, smallimageList, largeimageList);
                     }
                 }
                 catch
@@ -118,7 +122,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void AddToPhotoListView(Image img)
+        private void AddToPhotoListView(string imgName, string imgPath, ImageList smallimageList, ImageList largeimageList)
         {
             // If this function was invoked by DoWork() then the thread
             // cannot change the textbox's text, but the UI thread will
@@ -127,10 +131,35 @@ namespace PhotoExplosion
             {
                 // Use a lambda exp to create a Delegate that calls
                 // AddToTextBox on the UI thread
-                Invoke(new MethodInvoker(() => AddToPhotoListView(img)));
+                Invoke(new MethodInvoker(() => AddToPhotoListView(imgName, imgPath, smallimageList, largeimageList)));
             }
             else
-                photoList.SmallImageList.Images.Add(img);
+            {
+                //Add image to the image lists
+                smallimageList.Images.Add(Image.FromFile(imgPath));
+                largeimageList.Images.Add(Image.FromFile(imgPath));
+                
+                //create an item with image name and the image (imageIndex is the pointer to the image in the image list)
+                ListViewItem item = new ListViewItem(imgName);
+                int index = smallimageList.Images.Count - 1;
+                item.ImageIndex = index;
+                photoList.Items.Add(item);
+            }
+        }
+
+        private void SetImageList(ImageList smallimageList, ImageList largeimageList)
+        {
+            if (InvokeRequired)
+            {
+                // Use a lambda exp to create a Delegate that calls
+                // AddToTextBox on the UI thread
+                Invoke(new MethodInvoker(() => SetImageList(smallimageList, largeimageList)));
+            }
+            else
+            {
+                photoList.SmallImageList = smallimageList;
+                photoList.LargeImageList = largeimageList;
+            }
         }
 
         private void PhotoLoaderBW_ProgressChanged(object sender, ProgressChangedEventArgs e)
