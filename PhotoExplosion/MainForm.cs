@@ -63,7 +63,7 @@ namespace PhotoExplosion
 
         private void locateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = openFileDialog.ShowDialog();
+            
         }
 
         private void selectRootFolderToolStripMenuItem_Click(object sender, EventArgs e)

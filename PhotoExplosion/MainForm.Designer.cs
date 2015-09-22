@@ -43,9 +43,9 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.photoLoaderBW = new System.ComponentModel.BackgroundWorker();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -91,6 +91,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.locateToolStripMenuItem,
             this.selectRootFolderToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -175,10 +176,6 @@
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
             // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog";
-            // 
             // photoLoaderBW
             // 
             this.photoLoaderBW.WorkerReportsProgress = true;
@@ -186,6 +183,11 @@
             this.photoLoaderBW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.PhotoLoaderBW_DoWork);
             this.photoLoaderBW.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.PhotoLoaderBW_ProgressChanged);
             this.photoLoaderBW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.PhotoLoaderBW_RunWorkerCompleted);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(166, 6);
             // 
             // MainForm
             // 
@@ -225,9 +227,9 @@
         private System.Windows.Forms.ToolStripMenuItem smallToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem largeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.ComponentModel.BackgroundWorker photoLoaderBW;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
     }
 }
 
