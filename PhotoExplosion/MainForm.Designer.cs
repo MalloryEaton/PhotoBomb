@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView = new System.Windows.Forms.TreeView();
-            this.PhotoList = new System.Windows.Forms.ListView();
+            this.photoList = new System.Windows.Forms.ListView();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.locateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectRootFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +45,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.PhotoLoaderBW = new System.ComponentModel.BackgroundWorker();
+            this.photoLoaderBW = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -64,7 +64,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.PhotoList);
+            this.splitContainer1.Panel2.Controls.Add(this.photoList);
             this.splitContainer1.Size = new System.Drawing.Size(1010, 547);
             this.splitContainer1.SplitterDistance = 214;
             this.splitContainer1.TabIndex = 0;
@@ -77,14 +77,14 @@
             this.treeView.Size = new System.Drawing.Size(214, 547);
             this.treeView.TabIndex = 0;
             // 
-            // PhotoList
+            // photoList
             // 
-            this.PhotoList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PhotoList.Location = new System.Drawing.Point(0, 0);
-            this.PhotoList.Name = "PhotoList";
-            this.PhotoList.Size = new System.Drawing.Size(792, 547);
-            this.PhotoList.TabIndex = 0;
-            this.PhotoList.UseCompatibleStateImageBehavior = false;
+            this.photoList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.photoList.Location = new System.Drawing.Point(0, 0);
+            this.photoList.Name = "photoList";
+            this.photoList.Size = new System.Drawing.Size(792, 547);
+            this.photoList.TabIndex = 0;
+            this.photoList.UseCompatibleStateImageBehavior = false;
             // 
             // fileToolStripMenuItem
             // 
@@ -179,13 +179,13 @@
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
-            // PhotoLoaderBW
+            // photoLoaderBW
             // 
-            this.PhotoLoaderBW.WorkerReportsProgress = true;
-            this.PhotoLoaderBW.WorkerSupportsCancellation = true;
-            this.PhotoLoaderBW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.PhotoLoaderBW_DoWork);
-            this.PhotoLoaderBW.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.PhotoLoaderBW_ProgressChanged);
-            this.PhotoLoaderBW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.PhotoLoaderBW_RunWorkerCompleted);
+            this.photoLoaderBW.WorkerReportsProgress = true;
+            this.photoLoaderBW.WorkerSupportsCancellation = true;
+            this.photoLoaderBW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.PhotoLoaderBW_DoWork);
+            this.photoLoaderBW.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.PhotoLoaderBW_ProgressChanged);
+            this.photoLoaderBW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.PhotoLoaderBW_RunWorkerCompleted);
             // 
             // MainForm
             // 
@@ -213,7 +213,7 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView treeView;
-        private System.Windows.Forms.ListView PhotoList;
+        private System.Windows.Forms.ListView photoList;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -227,7 +227,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
-        private System.ComponentModel.BackgroundWorker PhotoLoaderBW;
+        private System.ComponentModel.BackgroundWorker photoLoaderBW;
     }
 }
 

@@ -19,13 +19,12 @@ namespace PhotoExplosion
         public MainForm()
         {
             InitializeComponent();
-            ListDirectory(PhotoLoaderBW, treeView, currentDirectory);
+            ListDirectory(treeView, currentDirectory);
         }
 
-        private static void ListDirectory(object sender, TreeView treeView, string path)
+        private void ListDirectory(TreeView treeView, string path)
         {
             treeView.Nodes.Clear();
-            BackgroundWorker photoLoaderBW = sender as BackgroundWorker;
 
             var stack = new Stack<TreeNode>();
             var rootDirectory = new DirectoryInfo(path);
@@ -50,6 +49,7 @@ namespace PhotoExplosion
             
             if (!photoLoaderBW.IsBusy)
             {
+                photoList.SmallImageList = new ImageList();
                 photoLoaderBW.RunWorkerAsync();
             }
 
@@ -130,7 +130,7 @@ namespace PhotoExplosion
                 Invoke(new MethodInvoker(() => AddToPhotoListView(img)));
             }
             else
-                PhotoList.SmallImageList.Images.Add(img);
+                photoList.SmallImageList.Images.Add(img);
         }
 
         private void PhotoLoaderBW_ProgressChanged(object sender, ProgressChangedEventArgs e)
