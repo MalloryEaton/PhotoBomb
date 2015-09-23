@@ -19,16 +19,14 @@ namespace PhotoExplosion
         public MainForm()
         {
             InitializeComponent();
-            ListDirectory(treeView, currentDirectory);
+            ListDirectory(treeView);
         }
 
-        private void ListDirectory(TreeView treeView, string path)
+        private void ListDirectory(TreeView treeView)
         {
             treeView.Nodes.Clear();
-
-            //ImageList imageList = new ImageList();
             var stack = new Stack<TreeNode>();
-            var rootDirectory = new DirectoryInfo(path);
+            var rootDirectory = new DirectoryInfo(currentDirectory);
             var node = new TreeNode(rootDirectory.Name) { Tag = rootDirectory };
             stack.Push(node);
 
@@ -69,6 +67,8 @@ namespace PhotoExplosion
         private void selectRootFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = folderBrowserDialog.ShowDialog();
+            currentDirectory = folderBrowserDialog.SelectedPath;
+            ListDirectory(treeView);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -97,10 +97,11 @@ namespace PhotoExplosion
             DirectoryInfo homeDir = new DirectoryInfo(currentDirectory);
 
             ImageList smallimageList = new ImageList();
-            smallimageList.ImageSize = new Size(45,40);
+            smallimageList.ImageSize = new Size(43,40);
             ImageList largeimageList = new ImageList();
-            largeimageList.ImageSize = new Size(90, 80);
+            largeimageList.ImageSize = new Size(85, 80);
 
+            //Reset the listview imagelist
             SetImageList(smallimageList, largeimageList);
 
             foreach (FileInfo file in homeDir.GetFiles())
@@ -125,12 +126,12 @@ namespace PhotoExplosion
         private void AddToPhotoListView(string imgName, string imgPath, ImageList smallimageList, ImageList largeimageList)
         {
             // If this function was invoked by DoWork() then the thread
-            // cannot change the textbox's text, but the UI thread will
+            // cannot add images to the listview, but the UI thread will
             // be in control when called via Invoke()
             if (InvokeRequired)
             {
                 // Use a lambda exp to create a Delegate that calls
-                // AddToTextBox on the UI thread
+                // AddToPhotoListView on the UI thread
                 Invoke(new MethodInvoker(() => AddToPhotoListView(imgName, imgPath, smallimageList, largeimageList)));
             }
             else
@@ -150,15 +151,13 @@ namespace PhotoExplosion
         private void SetImageList(ImageList smallimageList, ImageList largeimageList)
         {
             if (InvokeRequired)
-            {
-                // Use a lambda exp to create a Delegate that calls
-                // AddToTextBox on the UI thread
                 Invoke(new MethodInvoker(() => SetImageList(smallimageList, largeimageList)));
-            }
             else
             {
                 photoList.SmallImageList = smallimageList;
                 photoList.LargeImageList = largeimageList;
+                //Empty the item list in photoList view
+                photoList.Items.Clear();
             }
         }
 
@@ -172,7 +171,7 @@ namespace PhotoExplosion
             if (e.Cancelled) { }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void openImageButton_Click(object sender, EventArgs e)
         {
             EditPhotoForm editForm = new EditPhotoForm();
             DialogResult result = editForm.ShowDialog(this);
@@ -183,6 +182,6 @@ namespace PhotoExplosion
                 {
                     backgroundWorker1.CancelAsync();
                 }
-   */
+    */
 }
  
