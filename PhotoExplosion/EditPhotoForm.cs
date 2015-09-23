@@ -13,18 +13,25 @@ namespace PhotoExplosion
     public partial class EditPhotoForm : Form
     {
         public string imagePath { private get; set; }
+        private int imageWidth;
+        private int imageHeight;
 
         public EditPhotoForm()
         {
             InitializeComponent();
-            ImageToEdit.Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + @"\Albania_pasture.jpg");
-            if(ImageToEdit.Image.Size.Width > 460 && ImageToEdit.Image.Size.Height > 460)
+
+            ImageToEdit.Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + @"\soup.jpg");
+            imageWidth = ImageToEdit.Image.Size.Width;
+            imageHeight = ImageToEdit.Image.Size.Height;
+
+            Size = new Size(500, 500);
+            if (imageWidth > 460)
             {
-                Size = new Size(ImageToEdit.Image.Size.Width + 40, ImageToEdit.Image.Size.Height + 200);
+                Size = new Size(imageWidth + 40, Size.Height);
             }
-            else
+            if (imageHeight > 460)
             {
-                Size = new Size(500, 500);
+                Size = new Size(Size.Width, imageHeight + 200);
             }
             
         }
