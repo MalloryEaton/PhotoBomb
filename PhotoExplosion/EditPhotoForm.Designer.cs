@@ -36,13 +36,13 @@
             this.BrightnessSlider = new System.Windows.Forms.TrackBar();
             this.ColorButton = new System.Windows.Forms.Button();
             this.InvertColorsButton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.EditCancelButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.Image = new System.Windows.Forms.PictureBox();
+            this.ImageToEdit = new System.Windows.Forms.PictureBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.ControlsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Image)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ImageToEdit)).BeginInit();
             this.SuspendLayout();
             // 
             // ControlsGroupBox
@@ -100,8 +100,8 @@
             // 
             // ColorButton
             // 
-            this.ColorButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.ColorButton.Location = new System.Drawing.Point(493, 36);
+            this.ColorButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.ColorButton.Location = new System.Drawing.Point(273, 36);
             this.ColorButton.Name = "ColorButton";
             this.ColorButton.Size = new System.Drawing.Size(75, 23);
             this.ColorButton.TabIndex = 1;
@@ -111,24 +111,24 @@
             // 
             // InvertColorsButton
             // 
-            this.InvertColorsButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.InvertColorsButton.Location = new System.Drawing.Point(913, 36);
+            this.InvertColorsButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.InvertColorsButton.Location = new System.Drawing.Point(372, 36);
             this.InvertColorsButton.Name = "InvertColorsButton";
             this.InvertColorsButton.Size = new System.Drawing.Size(75, 23);
             this.InvertColorsButton.TabIndex = 0;
             this.InvertColorsButton.Text = "Invert";
             this.InvertColorsButton.UseVisualStyleBackColor = true;
             // 
-            // CancelButton
+            // EditCancelButton
             // 
-            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelButton.Location = new System.Drawing.Point(947, 582);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 1;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
+            this.EditCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.EditCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.EditCancelButton.Location = new System.Drawing.Point(947, 582);
+            this.EditCancelButton.Name = "EditCancelButton";
+            this.EditCancelButton.Size = new System.Drawing.Size(75, 23);
+            this.EditCancelButton.TabIndex = 1;
+            this.EditCancelButton.Text = "Cancel";
+            this.EditCancelButton.UseVisualStyleBackColor = true;
             // 
             // SaveButton
             // 
@@ -139,27 +139,28 @@
             this.SaveButton.TabIndex = 2;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // Image
+            // ImageToEdit
             // 
-            this.Image.Image = ((System.Drawing.Image)(resources.GetObject("Image.Image")));
-            this.Image.Location = new System.Drawing.Point(12, 12);
-            this.Image.Name = "Image";
-            this.Image.Size = new System.Drawing.Size(1010, 454);
-            this.Image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Image.TabIndex = 3;
-            this.Image.TabStop = false;
+            this.ImageToEdit.Location = new System.Drawing.Point(12, 12);
+            this.ImageToEdit.Name = "ImageToEdit";
+            this.ImageToEdit.Size = new System.Drawing.Size(1010, 454);
+            this.ImageToEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ImageToEdit.TabIndex = 3;
+            this.ImageToEdit.TabStop = false;
             // 
             // EditPhotoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1034, 617);
-            this.Controls.Add(this.Image);
+            this.Controls.Add(this.ImageToEdit);
             this.Controls.Add(this.SaveButton);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.EditCancelButton);
             this.Controls.Add(this.ControlsGroupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "EditPhotoForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -168,7 +169,7 @@
             this.ControlsGroupBox.ResumeLayout(false);
             this.ControlsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Image)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ImageToEdit)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -179,13 +180,13 @@
         private System.Windows.Forms.GroupBox ControlsGroupBox;
         private System.Windows.Forms.Button ColorButton;
         private System.Windows.Forms.Button InvertColorsButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button EditCancelButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar BrightnessSlider;
-        private System.Windows.Forms.PictureBox Image;
+        private System.Windows.Forms.PictureBox ImageToEdit;
         private System.Windows.Forms.ColorDialog colorDialog;
     }
 }

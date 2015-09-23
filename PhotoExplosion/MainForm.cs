@@ -174,7 +174,8 @@ namespace PhotoExplosion
         private void openImageButton_Click(object sender, EventArgs e)
         {
             EditPhotoForm editForm = new EditPhotoForm();
-            DialogResult result = editForm.ShowDialog(this);
+            //editForm.imagePath = @"C:\Users\" + currentUser + @"\" + currentDirectory + @"\Albania_pasture.jpg";
+            DialogResult result = editForm.ShowDialog();
         }
     }
 
