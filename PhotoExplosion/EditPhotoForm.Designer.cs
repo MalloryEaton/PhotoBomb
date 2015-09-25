@@ -40,6 +40,7 @@
             this.SaveButton = new System.Windows.Forms.Button();
             this.ImageToEdit = new System.Windows.Forms.PictureBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.ControlsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrightnessSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageToEdit)).BeginInit();
@@ -97,6 +98,7 @@
             this.BrightnessSlider.TabIndex = 2;
             this.BrightnessSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             this.BrightnessSlider.Value = 5;
+            this.BrightnessSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BrightnessSlider_MouseUp);
             // 
             // ColorButton
             // 
@@ -118,6 +120,7 @@
             this.InvertColorsButton.TabIndex = 0;
             this.InvertColorsButton.Text = "Invert";
             this.InvertColorsButton.UseVisualStyleBackColor = true;
+            this.InvertColorsButton.Click += new System.EventHandler(this.InvertColorsButton_Click);
             // 
             // EditCancelButton
             // 
@@ -149,6 +152,14 @@
             this.ImageToEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ImageToEdit.TabIndex = 3;
             this.ImageToEdit.TabStop = false;
+            // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.WorkerReportsProgress = true;
+            this.backgroundWorker.WorkerSupportsCancellation = true;
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
             // 
             // EditPhotoForm
             // 
@@ -188,5 +199,6 @@
         private System.Windows.Forms.TrackBar BrightnessSlider;
         private System.Windows.Forms.PictureBox ImageToEdit;
         private System.Windows.Forms.ColorDialog colorDialog;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
     }
 }
