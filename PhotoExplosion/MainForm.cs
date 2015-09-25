@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -57,7 +58,18 @@ namespace PhotoExplosion
 
         private void locateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            //Get the selected image
+            ListViewItem item = photoList.SelectedItems[0];
+
+            try
+            {
+                Process.Start("explorer.exe", string.Format("/select,\"{0}\"", item.Tag.ToString()));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Oops! There was a problem trying to locate the image.\n\n Error: " + ex, "Oops!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void selectRootFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -140,6 +152,9 @@ namespace PhotoExplosion
                 ListViewItem item = new ListViewItem(imgName);
                 int index = smallimageList.Images.Count - 1;
                 item.ImageIndex = index;
+
+                //Set the item's tag to the img's path for later use with the 'locate on disk' functionality
+                item.Tag = imgPath;
                 photoList.Items.Add(item);
             }
         }
