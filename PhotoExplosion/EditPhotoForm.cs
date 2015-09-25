@@ -52,19 +52,21 @@ namespace PhotoExplosion
 
         private void ChangeColor()
         {
-            Color color = colorDialog.Color;
-            //for (int y = 0; y < imageWidth; y++)
-            //{
-            //    for (int x = 0; x < imageWidth; x++)
-            //    {
-            //        Color color = ImageToEdit.Image.GetPixel(x, y);
-            //        int newRed = Math.Abs(color.R - 255);
-            //        int newGreen = Math.Abs(color.G - 255);
-            //        int newBlue = Math.Abs(color.B - 255);
-            //        Color newColor = Color.FromArgb(newRed, newGreen, newBlue);
-            //        ImageToEdit.Image.SetPixel(x, y, newColor);
-            //    }
-            //}
+            Color colorToAdd = colorDialog.Color;
+            myBitmap = new Bitmap(ImageToEdit.Image);
+            for (int y = 0; y < imageHeight; y++)
+            {
+                for (int x = 0; x < imageWidth; x++)
+                {
+                    Color color = myBitmap.GetPixel(x, y);
+                    double percentage = (((color.R + color.G + color.B) / 3.0) / 255.0);
+                    double newRed = Math.Abs(colorToAdd.R * percentage);
+                    double newGreen = Math.Abs(colorToAdd.G * percentage);
+                    double newBlue = Math.Abs(colorToAdd.B * percentage);
+                    Color newColor = Color.FromArgb((int)newRed, (int)newGreen, (int)newBlue);
+                    myBitmap.SetPixel(x, y, newColor);
+                }
+            }
         }
 
         private void InvertColorsButton_Click(object sender, EventArgs e)
