@@ -50,6 +50,19 @@ namespace PhotoExplosion
             treeView.Nodes.Add(node);
         }
 
+        private void SetImageList(ImageList smallimageList, ImageList largeimageList)
+        {
+            if (InvokeRequired)
+                Invoke(new MethodInvoker(() => SetImageList(smallimageList, largeimageList)));
+            else
+            {
+                photoList.SmallImageList = smallimageList;
+                photoList.LargeImageList = largeimageList;
+                //Empty the item list in photoList view
+                photoList.Items.Clear();
+            }
+        }
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutForm aboutBox = new AboutForm();
@@ -157,20 +170,7 @@ namespace PhotoExplosion
                 item.Tag = imgPath;
                 photoList.Items.Add(item);
             }
-        }
-
-        private void SetImageList(ImageList smallimageList, ImageList largeimageList)
-        {
-            if (InvokeRequired)
-                Invoke(new MethodInvoker(() => SetImageList(smallimageList, largeimageList)));
-            else
-            {
-                photoList.SmallImageList = smallimageList;
-                photoList.LargeImageList = largeimageList;
-                //Empty the item list in photoList view
-                photoList.Items.Clear();
-            }
-        }
+        }     
 
         private void PhotoLoaderBW_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -185,7 +185,9 @@ namespace PhotoExplosion
         private void openImageButton_Click(object sender, EventArgs e)
         {
             EditPhotoForm editForm = new EditPhotoForm();
-            //editForm.imagePath = @"C:\Users\" + currentUser + @"\" + currentDirectory + @"\Albania_pasture.jpg";
+            ListViewItem item = photoList.SelectedItems[0];
+
+            editForm.SetPhotoInfo(item.Tag.ToString());
             DialogResult result = editForm.ShowDialog();
         }
     }

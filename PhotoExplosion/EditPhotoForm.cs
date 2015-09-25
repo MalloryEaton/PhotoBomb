@@ -7,7 +7,6 @@ namespace PhotoExplosion
 {
     public partial class EditPhotoForm : Form
     {
-        public string imagePath { private get; set; }
         private int imageWidth;
         private int imageHeight;
         private enum Transformation { Invert, ChangeColor, ChangeBrightness};
@@ -17,8 +16,11 @@ namespace PhotoExplosion
         public EditPhotoForm()
         {
             InitializeComponent();
+        }
 
-            ImageToEdit.Image = Image.FromFile(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + @"\soup.jpg");
+        public void SetPhotoInfo(string imagePath)
+        {
+            ImageToEdit.Image = Image.FromFile(imagePath);
             imageWidth = ImageToEdit.Image.Size.Width;
             imageHeight = ImageToEdit.Image.Size.Height;
 
@@ -31,7 +33,6 @@ namespace PhotoExplosion
             {
                 Size = new Size(Size.Width, imageHeight + 200);
             }
-            
         }
 
         private void EditPhotoForm_Resize(object sender, EventArgs e)
