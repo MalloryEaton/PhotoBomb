@@ -32,5 +32,14 @@ namespace PhotoExplosion
             if (ea != null)
                 ea(this, e);
         }
+
+        private void TransformationProgressForm_Load(object sender, EventArgs e)
+        {
+            //http://stackoverflow.com/a/13463841/5086965
+            //This is to make the dialog be in the center of the parent
+            if (Owner != null)
+                Location = new Point(Owner.Location.X + Owner.Width / 2 - Width / 2,
+                    Owner.Location.Y + Owner.Height / 2 - Height / 2);
+        }
     }
 }

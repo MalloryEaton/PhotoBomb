@@ -76,6 +76,7 @@
             this.Name = "TransformationProgressForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Transforming";
+            this.Load += new System.EventHandler(this.TransformationProgressForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

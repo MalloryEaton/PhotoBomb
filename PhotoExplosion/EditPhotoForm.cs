@@ -66,11 +66,11 @@ namespace PhotoExplosion
         private void ColorButton_Click(object sender, EventArgs e)
         {
             Enabled = false;
-            transformationProgressForm = new TransformationProgressForm();
-            transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
-            transformationProgressForm.Show();
             selectedTransformation = Transformation.ChangeColor;
             DialogResult result = colorDialog.ShowDialog();
+            transformationProgressForm = new TransformationProgressForm();
+            transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
+            transformationProgressForm.Show(this);
             if (!backgroundWorker.IsBusy)
             {
                 backgroundWorker.RunWorkerAsync();
@@ -101,7 +101,8 @@ namespace PhotoExplosion
             Enabled = false;
             transformationProgressForm = new TransformationProgressForm();
             transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
-            transformationProgressForm.Show();
+            transformationProgressForm.StartPosition = FormStartPosition.CenterParent;
+            transformationProgressForm.Show(this);
             selectedTransformation = Transformation.Invert;
             if (!backgroundWorker.IsBusy)
             {
@@ -131,7 +132,7 @@ namespace PhotoExplosion
             Enabled = false;
             transformationProgressForm = new TransformationProgressForm();
             transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
-            transformationProgressForm.Show();
+            transformationProgressForm.Show(this);
             selectedTransformation = Transformation.ChangeBrightness;
             if (!backgroundWorker.IsBusy)
             {
@@ -230,20 +231,14 @@ namespace PhotoExplosion
                     {
                         ChangeBrightness();
                     }
-
-
-                    // Report progress % back to the UI thread
+                    
                     worker.ReportProgress(i * 10);
                 }
-
-                // Report my answer back to the UI thread
-                //e.Result = 6;
             }
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            // Pass the progress to AlertForm label and progressbar
             transformationProgressForm.ProgressValue = e.ProgressPercentage;
         }
 

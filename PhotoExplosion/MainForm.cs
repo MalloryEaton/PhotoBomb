@@ -12,7 +12,7 @@ namespace PhotoExplosion
     {
         private static string currentUser = Environment.UserName;
         private string currentDirectory = @"C:\Users\" + currentUser + @"\Pictures";
-        private FormWindowState lastWindowState = FormWindowState.Minimized;
+        //private FormWindowState lastWindowState = FormWindowState.Minimized;
 
         public MainForm()
         {
@@ -185,7 +185,7 @@ namespace PhotoExplosion
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            splitContainer1.Size = new Size(Width - 40, Height - 100);
+            splitContainer1.Size = new Size(Width - 40, Height - 110);
         }
 
         private void photoList_MouseDoubleClick(object sender, MouseEventArgs e)
