@@ -88,7 +88,7 @@
             this.photoList.Size = new System.Drawing.Size(793, 547);
             this.photoList.TabIndex = 0;
             this.photoList.UseCompatibleStateImageBehavior = false;
-            this.photoList.View = System.Windows.Forms.View.SmallIcon;
+            this.photoList.View = System.Windows.Forms.View.Details;
             this.photoList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.photoList_MouseDoubleClick);
             // 
             // fileToolStripMenuItem
@@ -183,7 +183,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1034, 24);
+            this.menuStrip.Size = new System.Drawing.Size(784, 24);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -206,7 +206,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1034, 617);
+            this.ClientSize = new System.Drawing.Size(784, 462);
             this.Controls.Add(this.photoProgressBar);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip);

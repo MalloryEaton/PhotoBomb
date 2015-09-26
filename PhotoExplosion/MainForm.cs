@@ -47,16 +47,20 @@ namespace PhotoExplosion
             treeView.Nodes.Add(node);
         }
 
-        private void SetImageList(ImageList smallimageList, ImageList largeimageList)
+        private void SetUp(ImageList smallimageList, ImageList largeimageList)
         {
             if (InvokeRequired)
-                Invoke(new MethodInvoker(() => SetImageList(smallimageList, largeimageList)));
+                Invoke(new MethodInvoker(() => SetUp(smallimageList, largeimageList)));
             else
             {
                 photoList.SmallImageList = smallimageList;
                 photoList.LargeImageList = largeimageList;
                 //Empty the item list in photoList view
                 photoList.Items.Clear();
+
+                photoList.Columns.Add("Name", 235, HorizontalAlignment.Left);
+                photoList.Columns.Add("Date", 150, HorizontalAlignment.Left);
+                photoList.Columns.Add("Size", 60, HorizontalAlignment.Left);
             }
         }
 
@@ -114,17 +118,40 @@ namespace PhotoExplosion
 
         private void detailToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            photoList.View = View.Details;
 
+            /*foreach (ListViewItem item in photoList.Items)
+            {
+                item.SubItems.Add(item.Tag.ToString());
+                item.Tag = null;
+                //item.SubItems.Add()
+            }*/
+
+            
         }
 
         private void smallToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (!smallToolStripMenuItem.Checked)
+            {
+                //Set list items' imagelist to smallimagelist
+                photoList.View = View.SmallIcon;
+                smallToolStripMenuItem.Checked = true;
+                largeToolStripMenuItem.Checked = false;
+                detailToolStripMenuItem.Checked = false;
+            }
         }
 
         private void largeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (!largeToolStripMenuItem.Checked)
+            {
+                //Set list items' imagelist to largeimagelist
+                photoList.View = View.LargeIcon;
+                largeToolStripMenuItem.Checked = true;
+                smallToolStripMenuItem.Checked = false;
+                detailToolStripMenuItem.Checked = false;
+            }
         }
 
         /*private void SetUpPhotoListView()
@@ -169,7 +196,7 @@ namespace PhotoExplosion
             //Set the columns for the image list view
             //SetUpPhotoListView();
             //Reset the listview imagelist
-            SetImageList(smallimageList, largeimageList);
+            SetUp(smallimageList, largeimageList);
             DisplayProgressBar(homeDir.GetFiles().Length);
 
             foreach (FileInfo file in homeDir.GetFiles())
@@ -187,7 +214,7 @@ namespace PhotoExplosion
                         byte[] bytes = File.ReadAllBytes(file.FullName);
                         MemoryStream ms = new MemoryStream(bytes);
                         Image img = Image.FromStream(ms);
-                        AddToPhotoListView(file.Name, file.FullName, smallimageList, largeimageList);
+                        AddToPhotoListView(file, smallimageList, largeimageList);
                     }
                 }
                 catch
@@ -198,7 +225,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void AddToPhotoListView(string imgName, string imgPath, ImageList smallimageList, ImageList largeimageList)
+        private void AddToPhotoListView(FileInfo file, ImageList smallimageList, ImageList largeimageList)
         {
             // If this function was invoked by DoWork() then the thread cannot add images to the listview, but the UI thread will
             // be in control when called via Invoke()
@@ -206,19 +233,23 @@ namespace PhotoExplosion
             {
                 // Use a lambda exp to create a Delegate that calls
                 // AddToPhotoListView on the UI thread
-                Invoke(new MethodInvoker(() => AddToPhotoListView(imgName, imgPath, smallimageList, largeimageList)));
+                Invoke(new MethodInvoker(() => AddToPhotoListView(file, smallimageList, largeimageList)));
             }
             else
             {
+
+                string imgPath = file.FullName;
+
                 //Add image to the image lists
                 smallimageList.Images.Add(Image.FromFile(imgPath));
                 largeimageList.Images.Add(Image.FromFile(imgPath));
                 
                 //create an item with image name and the image (imageIndex is the pointer to the image in the image list)
-                ListViewItem item = new ListViewItem(imgName);
+                ListViewItem item = new ListViewItem(file.Name);
                 int index = smallimageList.Images.Count - 1;
                 item.ImageIndex = index;
-
+                item.SubItems.Add(file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToShortTimeString());
+                item.SubItems.Add(file.Length.ToString());
                 //Set the item's tag to the img's path for later use with the 'locate on disk' functionality
                 item.Tag = imgPath;
                 photoList.Items.Add(item);
@@ -265,11 +296,11 @@ namespace PhotoExplosion
                         if (photoLoaderBW.WorkerSupportsCancellation)
                             photoLoaderBW.CancelAsync();
 
-                    //hault code execution until background worker is cancelled
+                    //Hault code execution until background worker is cancelled
                     while (photoLoaderBW.IsBusy)
                         Application.DoEvents();
 
-                    //edit full path if folder could be more than one subfolder from root folder and set currentDirectory
+                    //Edit full path if folder could be more than one subfolder from root folder and set currentDirectory
                     currentDirectory = Path.GetFullPath(rootDirectory + "\\" + e.Node.FullPath.Substring(treeView.Nodes[0].Text.Length));
 
                     if (!photoLoaderBW.IsBusy)
