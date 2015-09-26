@@ -46,7 +46,6 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.photoLoaderBW = new System.ComponentModel.BackgroundWorker();
-            this.openImageButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -87,6 +86,8 @@
             this.photoList.Size = new System.Drawing.Size(793, 547);
             this.photoList.TabIndex = 0;
             this.photoList.UseCompatibleStateImageBehavior = false;
+            this.photoList.View = System.Windows.Forms.View.SmallIcon;
+            this.photoList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.photoList_MouseDoubleClick);
             // 
             // fileToolStripMenuItem
             // 
@@ -192,28 +193,18 @@
             this.photoLoaderBW.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.PhotoLoaderBW_ProgressChanged);
             this.photoLoaderBW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.PhotoLoaderBW_RunWorkerCompleted);
             // 
-            // openImageButton
-            // 
-            this.openImageButton.Location = new System.Drawing.Point(478, 27);
-            this.openImageButton.Name = "openImageButton";
-            this.openImageButton.Size = new System.Drawing.Size(75, 23);
-            this.openImageButton.TabIndex = 2;
-            this.openImageButton.Text = "Open Image";
-            this.openImageButton.UseVisualStyleBackColor = true;
-            this.openImageButton.Click += new System.EventHandler(this.openImageButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1034, 617);
-            this.Controls.Add(this.openImageButton);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Photo Bomb Photo Editor";
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -244,7 +235,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.ComponentModel.BackgroundWorker photoLoaderBW;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.Button openImageButton;
     }
 }
 

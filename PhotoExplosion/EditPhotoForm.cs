@@ -13,9 +13,9 @@ namespace PhotoExplosion
         private enum Transformation { Invert, ChangeColor, ChangeBrightness};
         private Transformation selectedTransformation { get; set; }
         private Bitmap myBitmap;
-        private FormWindowState LastWindowState = FormWindowState.Minimized;
         private string originalImagePath;
         private TransformationProgressForm transformationProgressForm;
+        private FormWindowState lastWindowState = FormWindowState.Minimized;
 
         public EditPhotoForm()
         {
@@ -51,13 +51,13 @@ namespace PhotoExplosion
         private void EditPhotoForm_Resize(object sender, EventArgs e)
         {
             // When window state changes
-            if (WindowState == LastWindowState)
+            if (WindowState == lastWindowState)
             {
                 ImageToEdit.Size = new Size(Width - 40, Height - 200);
             }
             else
             {
-                LastWindowState = WindowState;
+                lastWindowState = WindowState;
             }
             
             ControlsGroupBox.Size = new Size(Width - 40, ControlsGroupBox.Height);
