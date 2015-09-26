@@ -87,6 +87,8 @@
             this.photoList.Size = new System.Drawing.Size(793, 547);
             this.photoList.TabIndex = 0;
             this.photoList.UseCompatibleStateImageBehavior = false;
+            this.photoList.View = System.Windows.Forms.View.SmallIcon;
+            this.photoList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.photoList_MouseDoubleClick);
             // 
             // fileToolStripMenuItem
             // 
@@ -214,6 +216,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Photo Bomb Photo Editor";
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
