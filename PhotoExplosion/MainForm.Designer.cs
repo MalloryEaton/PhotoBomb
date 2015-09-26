@@ -66,7 +66,7 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.photoList);
-            this.splitContainer.Size = new System.Drawing.Size(760, 401);
+            this.splitContainer.Size = new System.Drawing.Size(760, 400);
             this.splitContainer.SplitterDistance = 160;
             this.splitContainer.TabIndex = 0;
             // 
@@ -75,7 +75,7 @@
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(160, 401);
+            this.treeView.Size = new System.Drawing.Size(160, 400);
             this.treeView.TabIndex = 0;
             this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseClick);
             // 
@@ -85,7 +85,7 @@
             this.photoList.Location = new System.Drawing.Point(0, 0);
             this.photoList.MultiSelect = false;
             this.photoList.Name = "photoList";
-            this.photoList.Size = new System.Drawing.Size(596, 401);
+            this.photoList.Size = new System.Drawing.Size(596, 400);
             this.photoList.TabIndex = 0;
             this.photoList.UseCompatibleStateImageBehavior = false;
             this.photoList.View = System.Windows.Forms.View.Details;

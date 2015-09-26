@@ -58,6 +58,7 @@ namespace PhotoExplosion
                 //Empty the item list in photoList view
                 photoList.Items.Clear();
                 photoList.Columns.Clear();
+
                 photoList.Columns.Add("Name", 235, HorizontalAlignment.Left);
                 photoList.Columns.Add("Date", 150, HorizontalAlignment.Left);
                 photoList.Columns.Add("Size", 60, HorizontalAlignment.Left);
@@ -119,15 +120,6 @@ namespace PhotoExplosion
         private void detailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             photoList.View = View.Details;
-
-            /*foreach (ListViewItem item in photoList.Items)
-            {
-                item.SubItems.Add(item.Tag.ToString());
-                item.Tag = null;
-                //item.SubItems.Add()
-            }*/
-
-            
         }
 
         private void smallToolStripMenuItem_Click(object sender, EventArgs e)
@@ -153,20 +145,6 @@ namespace PhotoExplosion
                 detailToolStripMenuItem.Checked = false;
             }
         }
-
-        /*private void SetUpPhotoListView()
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(() => SetUpPhotoListView()));
-            }
-            else
-            {
-                photoList.Columns.Add("Name");
-                photoList.Columns.Add("Date");
-                photoList.Columns.Add("Size");
-            }
-        }*/
 
         private void DisplayProgressBar(int max)
         {
@@ -214,7 +192,7 @@ namespace PhotoExplosion
                         byte[] bytes = File.ReadAllBytes(file.FullName);
                         MemoryStream ms = new MemoryStream(bytes);
                         Image img = Image.FromStream(ms);
-                        AddToPhotoListView(file, smallimageList, largeimageList);
+                        AddToPhotoListView(file, img, smallimageList, largeimageList);
                     }
                 }
                 catch
@@ -225,7 +203,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void AddToPhotoListView(FileInfo file, ImageList smallimageList, ImageList largeimageList)
+        private void AddToPhotoListView(FileInfo file, Image img, ImageList smallimageList, ImageList largeimageList)
         {
             // If this function was invoked by DoWork() then the thread cannot add images to the listview, but the UI thread will
             // be in control when called via Invoke()
@@ -233,25 +211,24 @@ namespace PhotoExplosion
             {
                 // Use a lambda exp to create a Delegate that calls
                 // AddToPhotoListView on the UI thread
-                Invoke(new MethodInvoker(() => AddToPhotoListView(file, smallimageList, largeimageList)));
+                Invoke(new MethodInvoker(() => AddToPhotoListView(file, img, smallimageList, largeimageList)));
             }
             else
             {
-
-                string imgPath = file.FullName;
-
                 //Add image to the image lists
-                smallimageList.Images.Add(Image.FromFile(imgPath));
-                largeimageList.Images.Add(Image.FromFile(imgPath));
+                smallimageList.Images.Add(img);
+                largeimageList.Images.Add(img);
                 
                 //create an item with image name and the image (imageIndex is the pointer to the image in the image list)
                 ListViewItem item = new ListViewItem(file.Name);
                 int index = smallimageList.Images.Count - 1;
                 item.ImageIndex = index;
+                //Last modification date and time
                 item.SubItems.Add(file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToShortTimeString());
+                //File Size
                 item.SubItems.Add(file.Length.ToString());
                 //Set the item's tag to the img's path for later use with the 'locate on disk' functionality
-                item.Tag = imgPath;
+                item.Tag = file.FullName;
                 photoList.Items.Add(item);
             }
         }     
@@ -263,15 +240,12 @@ namespace PhotoExplosion
 
         private void PhotoLoaderBW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled) {
-                
-            }
             photoProgressBar.Visible = false;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            splitContainer.Size = new Size(Width - 40, Height - 110);
+            splitContainer.Size = new Size(Width - 40, Height - 100);
         }
 
         private void photoList_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -309,11 +283,4 @@ namespace PhotoExplosion
             }
         }
     }
-
-    /*if (backgroundWorker1.WorkerSupportsCancellation)
-                {
-                    backgroundWorker1.CancelAsync();
-                }
-    */
 }
- 
