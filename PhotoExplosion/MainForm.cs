@@ -183,15 +183,6 @@ namespace PhotoExplosion
             if (e.Cancelled) { }
         }
 
-        private void openImageButton_Click(object sender, EventArgs e)
-        {
-            EditPhotoForm editForm = new EditPhotoForm();
-            ListViewItem item = photoList.SelectedItems[0];
-
-            editForm.SetPhotoInfo(item.Tag.ToString());
-            DialogResult result = editForm.ShowDialog();
-        }
-
         private void MainForm_Resize(object sender, EventArgs e)
         {
             splitContainer1.Size = new Size(Width - 40, Height - 100);
