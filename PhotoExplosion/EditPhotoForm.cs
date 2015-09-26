@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PhotoExplosion
@@ -25,7 +26,11 @@ namespace PhotoExplosion
         public void SetPhotoInfo(string imagePath)
         {
             originalImagePath = imagePath;
-            ImageToEdit.Image = Image.FromFile(imagePath);
+
+            byte[] bytes = File.ReadAllBytes(imagePath);
+            MemoryStream ms = new MemoryStream(bytes);
+            ImageToEdit.Image = Image.FromStream(ms);
+
             imageWidth = ImageToEdit.Image.Size.Width;
             imageHeight = ImageToEdit.Image.Size.Height;
 
@@ -65,15 +70,18 @@ namespace PhotoExplosion
 
         private void ColorButton_Click(object sender, EventArgs e)
         {
-            Enabled = false;
             selectedTransformation = Transformation.ChangeColor;
             DialogResult result = colorDialog.ShowDialog();
-            transformationProgressForm = new TransformationProgressForm();
-            transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
-            transformationProgressForm.Show(this);
-            if (!backgroundWorker.IsBusy)
+            if(result != DialogResult.Cancel)
             {
-                backgroundWorker.RunWorkerAsync();
+                Enabled = false;
+                transformationProgressForm = new TransformationProgressForm();
+                transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
+                transformationProgressForm.Show(this);
+                if (!backgroundWorker.IsBusy)
+                {
+                    backgroundWorker.RunWorkerAsync();
+                }
             }
         }
 
@@ -98,7 +106,6 @@ namespace PhotoExplosion
 
         private void InvertColorsButton_Click(object sender, EventArgs e)
         {
-            Enabled = false;
             transformationProgressForm = new TransformationProgressForm();
             transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
             transformationProgressForm.StartPosition = FormStartPosition.CenterParent;
@@ -106,6 +113,7 @@ namespace PhotoExplosion
             selectedTransformation = Transformation.Invert;
             if (!backgroundWorker.IsBusy)
             {
+                Enabled = false;
                 backgroundWorker.RunWorkerAsync();
             }
         }
@@ -129,13 +137,13 @@ namespace PhotoExplosion
 
         private void BrightnessSlider_MouseUp(object sender, MouseEventArgs e)
         {
-            Enabled = false;
             transformationProgressForm = new TransformationProgressForm();
             transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
             transformationProgressForm.Show(this);
             selectedTransformation = Transformation.ChangeBrightness;
             if (!backgroundWorker.IsBusy)
             {
+                Enabled = false;
                 backgroundWorker.RunWorkerAsync();
             }
         }
@@ -257,6 +265,7 @@ namespace PhotoExplosion
         {
             string path = originalImagePath;
             ImageToEdit.Image.Save(originalImagePath, ImageFormat.Jpeg);
+            Close();
         }
 
         private void EditPhotoForm_ResizeEnd(object sender, EventArgs e)
