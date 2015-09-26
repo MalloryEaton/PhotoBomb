@@ -92,12 +92,13 @@
             // BrightnessSlider
             // 
             this.BrightnessSlider.Location = new System.Drawing.Point(6, 36);
+            this.BrightnessSlider.Maximum = 100;
             this.BrightnessSlider.Name = "BrightnessSlider";
             this.BrightnessSlider.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.BrightnessSlider.Size = new System.Drawing.Size(248, 45);
             this.BrightnessSlider.TabIndex = 2;
             this.BrightnessSlider.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.BrightnessSlider.Value = 5;
+            this.BrightnessSlider.Value = 50;
             this.BrightnessSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BrightnessSlider_MouseUp);
             // 
             // ColorButton
