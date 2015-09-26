@@ -39,7 +39,7 @@ namespace PhotoExplosion
             {
                 Size = new Size(imageWidth + 40, Size.Height);
             }
-            if (imageHeight > 460)
+            if (imageHeight > 260)
             {
                 Size = new Size(Size.Width, imageHeight + 200);
             }
