@@ -177,6 +177,7 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit Photo";
+            this.ResizeEnd += new System.EventHandler(this.EditPhotoForm_ResizeEnd);
             this.Resize += new System.EventHandler(this.EditPhotoForm_Resize);
             this.ControlsGroupBox.ResumeLayout(false);
             this.ControlsGroupBox.PerformLayout();
