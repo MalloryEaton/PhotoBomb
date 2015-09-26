@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace PhotoExplosion
@@ -12,6 +13,8 @@ namespace PhotoExplosion
         private enum Transformation { Invert, ChangeColor, ChangeBrightness};
         private Transformation selectedTransformation { get; set; }
         private Bitmap myBitmap;
+        private string originalImagePath;
+        private TransformationProgressForm transformationProgressForm;
         private FormWindowState lastWindowState = FormWindowState.Minimized;
 
         public EditPhotoForm()
@@ -21,6 +24,7 @@ namespace PhotoExplosion
 
         public void SetPhotoInfo(string imagePath)
         {
+            originalImagePath = imagePath;
             ImageToEdit.Image = Image.FromFile(imagePath);
             imageWidth = ImageToEdit.Image.Size.Width;
             imageHeight = ImageToEdit.Image.Size.Height;
@@ -61,6 +65,10 @@ namespace PhotoExplosion
 
         private void ColorButton_Click(object sender, EventArgs e)
         {
+            Enabled = false;
+            transformationProgressForm = new TransformationProgressForm();
+            transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
+            transformationProgressForm.Show();
             selectedTransformation = Transformation.ChangeColor;
             DialogResult result = colorDialog.ShowDialog();
             if (!backgroundWorker.IsBusy)
@@ -69,7 +77,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void ChangeColor(BackgroundWorker worker)
+        private void ChangeColor()
         {
             Color colorToAdd = colorDialog.Color;
             myBitmap = new Bitmap(ImageToEdit.Image);
@@ -85,12 +93,15 @@ namespace PhotoExplosion
                     Color newColor = Color.FromArgb((int)newRed, (int)newGreen, (int)newBlue);
                     myBitmap.SetPixel(x, y, newColor);
                 }
-                worker.ReportProgress(0);
             }
         }
 
         private void InvertColorsButton_Click(object sender, EventArgs e)
         {
+            Enabled = false;
+            transformationProgressForm = new TransformationProgressForm();
+            transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
+            transformationProgressForm.Show();
             selectedTransformation = Transformation.Invert;
             if (!backgroundWorker.IsBusy)
             {
@@ -98,7 +109,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void InvertColors(BackgroundWorker worker)
+        private void InvertColors()
         {
             myBitmap = new Bitmap(ImageToEdit.Image);
             for (int y = 0; y < imageHeight; y++)
@@ -117,6 +128,10 @@ namespace PhotoExplosion
 
         private void BrightnessSlider_MouseUp(object sender, MouseEventArgs e)
         {
+            Enabled = false;
+            transformationProgressForm = new TransformationProgressForm();
+            transformationProgressForm.Canceled += new EventHandler<EventArgs>(CancelTransformationButton_Click);
+            transformationProgressForm.Show();
             selectedTransformation = Transformation.ChangeBrightness;
             if (!backgroundWorker.IsBusy)
             {
@@ -124,7 +139,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void ChangeBrightness(BackgroundWorker worker)
+        private void ChangeBrightness()
         {
             int value = -1;
             int newRed;
@@ -177,51 +192,66 @@ namespace PhotoExplosion
             }
         }
 
+        private void CancelTransformationButton_Click(object sender, EventArgs e)
+        {
+            if (backgroundWorker.WorkerSupportsCancellation == true)
+            {
+                // Cancel the asynchronous operation.
+                backgroundWorker.CancelAsync();
+                // Close the AlertForm
+                transformationProgressForm.Close();
+            }
+        }
+
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            
-            if (worker.CancellationPending)
-            {
-                // Inform the UI thread that we quit early
-                // because we were told to cancel
-                e.Cancel = true;
-            }
-            else
-            {
-                if(selectedTransformation == Transformation.Invert)
-                {
-                    InvertColors(worker);
-                }
-                else if(selectedTransformation == Transformation.ChangeColor)
-                {
-                    ChangeColor(worker);
-                }
-                else if(selectedTransformation == Transformation.ChangeBrightness)
-                {
-                    ChangeBrightness(worker);
-                }
-                
 
-                // Report progress % back to the UI thread
-                //worker.ReportProgress(10);
-            }
+            for (int i = 1; i <= 10; i++)
+            {
+                if (worker.CancellationPending)
+                {
+                    // Inform the UI thread that we quit early
+                    // because we were told to cancel
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    if (selectedTransformation == Transformation.Invert)
+                    {
+                        InvertColors();
+                    }
+                    else if (selectedTransformation == Transformation.ChangeColor)
+                    {
+                        ChangeColor();
+                    }
+                    else if (selectedTransformation == Transformation.ChangeBrightness)
+                    {
+                        ChangeBrightness();
+                    }
 
-            // Report my answer back to the UI thread
-            //e.Result = 6;
+
+                    // Report progress % back to the UI thread
+                    worker.ReportProgress(i * 10);
+                }
+
+                // Report my answer back to the UI thread
+                //e.Result = 6;
+            }
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            // Pass the progress to AlertForm label and progressbar
+            transformationProgressForm.ProgressValue = e.ProgressPercentage;
         }
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // In BW.WorkerCompleted method:
-            //Close the dialog box
-            //Enable the edit form and bring it to the front
-            //If the BW wasn’t cancelled then pictureBox’s image = transformedBitmap
+            transformationProgressForm.Close();
+            Enabled = true;
+            BringToFront();
             if (!e.Cancelled)
             {
                 ImageToEdit.Image = myBitmap;
@@ -230,7 +260,13 @@ namespace PhotoExplosion
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            //myImage.Save("myphoto.jpg", ImageFormat.Jpeg);
+            string path = originalImagePath;
+            ImageToEdit.Image.Save(originalImagePath, ImageFormat.Jpeg);
+        }
+
+        private void EditPhotoForm_ResizeEnd(object sender, EventArgs e)
+        {
+            //do extra credit here
         }
     }
 }
