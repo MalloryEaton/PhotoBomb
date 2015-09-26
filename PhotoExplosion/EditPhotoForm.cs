@@ -12,6 +12,7 @@ namespace PhotoExplosion
         private enum Transformation { Invert, ChangeColor, ChangeBrightness};
         private Transformation selectedTransformation { get; set; }
         private Bitmap myBitmap;
+        private FormWindowState LastWindowState = FormWindowState.Minimized;
 
         public EditPhotoForm()
         {
@@ -33,11 +34,29 @@ namespace PhotoExplosion
             {
                 Size = new Size(Size.Width, imageHeight + 200);
             }
+
+            //if small image, make not resizeable
+            if(imageWidth < 460 || imageHeight < 460)
+            {
+                FormBorderStyle = FormBorderStyle.FixedDialog;
+                MaximizeBox = false;
+                ImageToEdit.Size = new Size(imageWidth, imageHeight);
+            }
         }
 
         private void EditPhotoForm_Resize(object sender, EventArgs e)
         {
-            ImageToEdit.Size = new Size(Width - 40, Height - 200);
+            // When window state changes
+            if (WindowState == LastWindowState)
+            {
+                ImageToEdit.Size = new Size(Width - 40, Height - 200);
+            }
+            else
+            {
+                LastWindowState = WindowState;
+            }
+
+            
             ControlsGroupBox.Size = new Size(Width - 40, ControlsGroupBox.Height);
         }
 
@@ -51,7 +70,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void ChangeColor()
+        private void ChangeColor(BackgroundWorker worker)
         {
             Color colorToAdd = colorDialog.Color;
             myBitmap = new Bitmap(ImageToEdit.Image);
@@ -67,6 +86,7 @@ namespace PhotoExplosion
                     Color newColor = Color.FromArgb((int)newRed, (int)newGreen, (int)newBlue);
                     myBitmap.SetPixel(x, y, newColor);
                 }
+                worker.ReportProgress(0);
             }
         }
 
@@ -79,7 +99,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void InvertColors()
+        private void InvertColors(BackgroundWorker worker)
         {
             myBitmap = new Bitmap(ImageToEdit.Image);
             for (int y = 0; y < imageHeight; y++)
@@ -105,7 +125,7 @@ namespace PhotoExplosion
             }
         }
 
-        private void ChangeBrightness()
+        private void ChangeBrightness(BackgroundWorker worker)
         {
             //for (int y = 0; y < transformedBitmap.Height; y++)
             //{
@@ -135,15 +155,15 @@ namespace PhotoExplosion
             {
                 if(selectedTransformation == Transformation.Invert)
                 {
-                    InvertColors();
+                    InvertColors(worker);
                 }
                 else if(selectedTransformation == Transformation.ChangeColor)
                 {
-                    ChangeColor();
+                    ChangeColor(worker);
                 }
                 else if(selectedTransformation == Transformation.ChangeBrightness)
                 {
-                    ChangeBrightness();
+                    ChangeBrightness(worker);
                 }
                 
 
