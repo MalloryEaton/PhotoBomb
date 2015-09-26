@@ -76,6 +76,7 @@
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(213, 547);
             this.treeView.TabIndex = 0;
+            this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseClick);
             // 
             // photoList
             // 

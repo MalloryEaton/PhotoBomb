@@ -12,20 +12,20 @@ namespace PhotoExplosion
     {
         private static string currentUser = Environment.UserName;
         private string currentDirectory = @"C:\Users\" + currentUser + @"\Pictures";
-        //private FormWindowState lastWindowState = FormWindowState.Minimized;
+        private string rootDirectory = @"C:\Users\" + currentUser + @"\Pictures";
 
         public MainForm()
         {
             InitializeComponent();
-            ListDirectory(treeView);
+            ListDirectory(treeView, true);
         }
 
-        private void ListDirectory(TreeView treeView)
+        private void ListDirectory(TreeView treeView, bool loadImages)
         {
             treeView.Nodes.Clear();
             var stack = new Stack<TreeNode>();
-            var rootDirectory = new DirectoryInfo(currentDirectory);
-            var node = new TreeNode(rootDirectory.Name) { Tag = rootDirectory };
+            var rootDir = new DirectoryInfo(currentDirectory);
+            var node = new TreeNode(rootDir.Name) { Tag = rootDir };
             stack.Push(node);
 
             while (stack.Count > 0)
@@ -38,14 +38,9 @@ namespace PhotoExplosion
                     currentNode.Nodes.Add(childDirectoryNode);
                     stack.Push(childDirectoryNode);
                 }
-                
-                
-                /*foreach (var file in directoryInfo.GetFiles())
-                    imageList.Images.Add(new Bitmap(file.GetType(), 32x32));
-                */
             }
             
-            if (!photoLoaderBW.IsBusy)
+            if (loadImages && !photoLoaderBW.IsBusy)
                 photoLoaderBW.RunWorkerAsync();
 
             treeView.Nodes.Add(node);
@@ -64,6 +59,14 @@ namespace PhotoExplosion
             }
         }
 
+        private bool IsClickOnText(TreeView treeView, TreeNode node, Point location)
+        {
+            var hitTest = treeView.HitTest(location);
+
+            return hitTest.Node == node
+                && hitTest.Location == TreeViewHitTestLocations.Label;
+        }
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutForm aboutBox = new AboutForm();
@@ -72,25 +75,35 @@ namespace PhotoExplosion
 
         private void locateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Get the selected image
-            ListViewItem item = photoList.SelectedItems[0];
-
             try
             {
-                Process.Start("explorer.exe", string.Format("/select,\"{0}\"", item.Tag.ToString()));
+                //Get the selected image
+                ListViewItem item = photoList.SelectedItems[0];
+                try
+                {
+                    Process.Start("explorer.exe", string.Format("/select,\"{0}\"", item.Tag.ToString()));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Oops! There was a problem trying to locate the image.\n\n Error: " + ex, "Oops!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(this, "Oops! There was a problem trying to locate the image.\n\n Error: " + ex, "Oops!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Please select a picture.", "Oops!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
 
         private void selectRootFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = folderBrowserDialog.ShowDialog();
-            currentDirectory = folderBrowserDialog.SelectedPath;
-            ListDirectory(treeView);
+            if (result == DialogResult.OK)
+            {
+                rootDirectory = folderBrowserDialog.SelectedPath;
+                currentDirectory = rootDirectory;
+                //pass false as second parameter so images do not load
+                ListDirectory(treeView, false);
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -195,6 +208,23 @@ namespace PhotoExplosion
 
             editForm.SetPhotoInfo(item.Tag.ToString());
             DialogResult result = editForm.ShowDialog();
+        }
+
+        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            //Was the click on the folder name?
+            if (IsClickOnText(treeView, e.Node, e.Location))
+            {
+                //Display selected folder's images if it is not the current folder
+                if (!(Path.GetFullPath(e.Node.Tag.ToString()).Equals(Path.GetFullPath(currentDirectory))))
+                {
+                    //edit full path if folder could be more than one subfolder from root folder and set currentDirectory
+                    currentDirectory = Path.GetFullPath(rootDirectory + "\\" + e.Node.FullPath.Substring(treeView.Nodes[0].Text.Length));
+                   
+                    if (!photoLoaderBW.IsBusy)
+                        photoLoaderBW.RunWorkerAsync();
+                }
+            }
         }
     }
 
