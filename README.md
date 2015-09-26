@@ -15,13 +15,15 @@ http://clipartist.net/svg/bomb-scalable-vector-graphics-svg/
 
 3. Extra credit: Number 1 the Splitter control, and Number 3 showing the images as they are loaded
 
-4. Mallory: 
+4. 
+   Mallory: 
 	Worked on the Edit Photo form 
 	About box
 	All of the functionality for editing the photos, saving them
 	The transformation progress box, etc.
 	50% of the Main form's appearance and layout
-    Ethan: 
+
+   Ethan: 
 	50% of the Main form's appearance and layout
 	Worked on the Main form
 	Reading in of the files/images, and populating the list and tree views (background worker code)
