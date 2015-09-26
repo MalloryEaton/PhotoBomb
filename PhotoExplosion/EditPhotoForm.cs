@@ -55,7 +55,6 @@ namespace PhotoExplosion
             {
                 LastWindowState = WindowState;
             }
-
             
             ControlsGroupBox.Size = new Size(Width - 40, ControlsGroupBox.Height);
         }
@@ -127,18 +126,55 @@ namespace PhotoExplosion
 
         private void ChangeBrightness(BackgroundWorker worker)
         {
-            //for (int y = 0; y < transformedBitmap.Height; y++)
-            //{
-            //    for (int x = 0; x < transformedBitmap.Width; x++)
-            //    {
-            //        Color color = transformedBitmap.GetPixel(x, y);
-            //        int newRed = Math.Abs(color.R - 255);
-            //        int newGreen = Math.Abs(color.G - 255);
-            //        int newBlue = Math.Abs(color.B - 255);
-            //        Color newColor = Color.FromArgb(newRed, newGreen, newBlue);
-            //        transformedBitmap.SetPixel(x, y, newColor);
-            //    }
-            //}
+            int value = -1;
+            int newRed;
+            int newGreen;
+            int newBlue;
+            if (BrightnessSlider.InvokeRequired)
+            {
+                BrightnessSlider.Invoke(new MethodInvoker(delegate { value = BrightnessSlider.Value; }));
+            }
+            if(value != -1)
+            {
+                int amount = Convert.ToInt32(2 * (50 - value) * 0.01 * 255);
+                myBitmap = new Bitmap(ImageToEdit.Image);
+                for (int y = 0; y < imageHeight; y++)
+                {
+                    for (int x = 0; x < imageWidth; x++)
+                    {
+                        Color color = myBitmap.GetPixel(x, y);
+                        newRed = color.R - amount;
+                        newGreen = color.G - amount;
+                        newBlue = color.B - amount;
+                        if (newRed > 255)
+                        {
+                            newRed = 255;
+                        }
+                        if (newRed < 0)
+                        {
+                            newRed = 0;
+                        }
+                        if (newGreen > 255)
+                        {
+                            newGreen = 255;
+                        }
+                        if (newGreen < 0)
+                        {
+                            newGreen = 0;
+                        }
+                        if (newBlue > 255)
+                        {
+                            newBlue = 255;
+                        }
+                        if (newBlue < 0)
+                        {
+                            newBlue = 0;
+                        }
+                        Color newColor = Color.FromArgb(newRed, newGreen, newBlue);
+                        myBitmap.SetPixel(x, y, newColor);
+                    }
+                }
+            }
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
