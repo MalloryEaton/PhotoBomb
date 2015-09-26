@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace PhotoExplosion
@@ -171,8 +172,9 @@ namespace PhotoExplosion
             ImageList largeimageList = new ImageList();
             largeimageList.ImageSize = new Size(85, 80);
 
-            //Set the columns for the image list view
-            //SetUpPhotoListView();
+            //Got rid of the listview's flickering issue (see class method below for definition)
+            photoList.DoubleBuffered(true);
+
             //Reset the listview imagelist
             SetUp(smallimageList, largeimageList);
             DisplayProgressBar(homeDir.GetFiles().Length);
@@ -218,15 +220,20 @@ namespace PhotoExplosion
                 //Add image to the image lists
                 smallimageList.Images.Add(img);
                 largeimageList.Images.Add(img);
-                
+
                 //create an item with image name and the image (imageIndex is the pointer to the image in the image list)
                 ListViewItem item = new ListViewItem(file.Name);
                 int index = smallimageList.Images.Count - 1;
                 item.ImageIndex = index;
                 //Last modification date and time
                 item.SubItems.Add(file.LastWriteTime.ToShortDateString() + " " + file.LastWriteTime.ToShortTimeString());
+
                 //File Size
-                item.SubItems.Add(file.Length.ToString());
+                if (file.Length < 1024)
+                    item.SubItems.Add(file.Length.ToString() + " KB");
+                else if (file.Length >= 1024)
+                    item.SubItems.Add((file.Length / 1000).ToString() + " MB");
+
                 //Set the item's tag to the img's path for later use with the 'locate on disk' functionality
                 item.Tag = file.FullName;
                 photoList.Items.Add(item);
@@ -281,6 +288,19 @@ namespace PhotoExplosion
                         photoLoaderBW.RunWorkerAsync();
                 }
             }
+        }
+    }
+
+    /*****************************************************************************************************************************
+        http://stackoverflow.com/questions/87795/how-to-prevent-flickering-in-listview-when-updating-a-single-listviewitems-text
+        Found this code online that gets rid of the flicking of the listview while loading images into it.
+    *****************************************************************************************************************************/
+    public static class ControlExtensions
+    {
+        public static void DoubleBuffered(this Control control, bool enable)
+        {
+            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
         }
     }
 }
