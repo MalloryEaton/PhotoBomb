@@ -46,6 +46,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.photoLoaderBW = new System.ComponentModel.BackgroundWorker();
+            this.photoProgressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -194,11 +195,19 @@
             this.photoLoaderBW.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.PhotoLoaderBW_ProgressChanged);
             this.photoLoaderBW.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.PhotoLoaderBW_RunWorkerCompleted);
             // 
+            // photoProgressBar
+            // 
+            this.photoProgressBar.Location = new System.Drawing.Point(12, 33);
+            this.photoProgressBar.Name = "photoProgressBar";
+            this.photoProgressBar.Size = new System.Drawing.Size(1010, 10);
+            this.photoProgressBar.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1034, 617);
+            this.Controls.Add(this.photoProgressBar);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -237,6 +246,7 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.ComponentModel.BackgroundWorker photoLoaderBW;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ProgressBar photoProgressBar;
     }
 }
 

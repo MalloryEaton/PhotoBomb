@@ -18,6 +18,7 @@ namespace PhotoExplosion
         {
             InitializeComponent();
             ListDirectory(treeView, true);
+            photoProgressBar.Visible = false;
         }
 
         private void ListDirectory(TreeView treeView, bool loadImages)
@@ -126,6 +127,35 @@ namespace PhotoExplosion
 
         }
 
+        /*private void SetUpPhotoListView()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => SetUpPhotoListView()));
+            }
+            else
+            {
+                photoList.Columns.Add("Name");
+                photoList.Columns.Add("Date");
+                photoList.Columns.Add("Size");
+            }
+        }*/
+
+        private void DisplayProgressBar(int max)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => DisplayProgressBar(max)));
+            }
+            else
+            {
+                photoProgressBar.Maximum = max;
+                photoProgressBar.Minimum = 0;
+                photoProgressBar.Visible = true;
+                photoProgressBar.Value = 0;
+            }
+        }
+
         private void PhotoLoaderBW_DoWork(object sender, DoWorkEventArgs e)
         {
             string directory = currentDirectory.Substring(3);
@@ -136,11 +166,20 @@ namespace PhotoExplosion
             ImageList largeimageList = new ImageList();
             largeimageList.ImageSize = new Size(85, 80);
 
+            //Set the columns for the image list view
+            //SetUpPhotoListView();
             //Reset the listview imagelist
             SetImageList(smallimageList, largeimageList);
+            DisplayProgressBar(homeDir.GetFiles().Length);
 
             foreach (FileInfo file in homeDir.GetFiles())
             {
+                if (photoLoaderBW.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
                 try
                 {
                     if (file.Extension.ToLower() == ".jpg")
@@ -155,13 +194,13 @@ namespace PhotoExplosion
                 {
                     Console.WriteLine("This is not an image file");
                 }
+                photoLoaderBW.ReportProgress(1);
             }
         }
 
         private void AddToPhotoListView(string imgName, string imgPath, ImageList smallimageList, ImageList largeimageList)
         {
-            // If this function was invoked by DoWork() then the thread
-            // cannot add images to the listview, but the UI thread will
+            // If this function was invoked by DoWork() then the thread cannot add images to the listview, but the UI thread will
             // be in control when called via Invoke()
             if (InvokeRequired)
             {
@@ -188,12 +227,15 @@ namespace PhotoExplosion
 
         private void PhotoLoaderBW_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            photoProgressBar.Value += e.ProgressPercentage;
         }
 
         private void PhotoLoaderBW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled) { }
+            if (e.Cancelled) {
+                
+            }
+            photoProgressBar.Visible = false;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
@@ -218,9 +260,18 @@ namespace PhotoExplosion
                 //Display selected folder's images if it is not the current folder
                 if (!(Path.GetFullPath(e.Node.Tag.ToString()).Equals(Path.GetFullPath(currentDirectory))))
                 {
+                    //Cancel background worker if it is running
+                    if (photoLoaderBW.IsBusy)
+                        if (photoLoaderBW.WorkerSupportsCancellation)
+                            photoLoaderBW.CancelAsync();
+
+                    //hault code execution until background worker is cancelled
+                    while (photoLoaderBW.IsBusy)
+                        Application.DoEvents();
+
                     //edit full path if folder could be more than one subfolder from root folder and set currentDirectory
                     currentDirectory = Path.GetFullPath(rootDirectory + "\\" + e.Node.FullPath.Substring(treeView.Nodes[0].Text.Length));
-                   
+
                     if (!photoLoaderBW.IsBusy)
                         photoLoaderBW.RunWorkerAsync();
                 }
