@@ -57,7 +57,7 @@ namespace PhotoExplosion
                 photoList.LargeImageList = largeimageList;
                 //Empty the item list in photoList view
                 photoList.Items.Clear();
-
+                photoList.Columns.Clear();
                 photoList.Columns.Add("Name", 235, HorizontalAlignment.Left);
                 photoList.Columns.Add("Date", 150, HorizontalAlignment.Left);
                 photoList.Columns.Add("Size", 60, HorizontalAlignment.Left);
@@ -271,7 +271,7 @@ namespace PhotoExplosion
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            splitContainer1.Size = new Size(Width - 40, Height - 110);
+            splitContainer.Size = new Size(Width - 40, Height - 110);
         }
 
         private void photoList_MouseDoubleClick(object sender, MouseEventArgs e)
