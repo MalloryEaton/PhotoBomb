@@ -1,6 +1,8 @@
 # PhotoBomb
 by Ethan Carrell and Mallory Eaton
 
+Repo: https://github.com/MalloryEaton/PhotoBomb
+
 Image:
 http://clipartist.net/svg/bomb-scalable-vector-graphics-svg/
 
@@ -11,7 +13,7 @@ http://clipartist.net/svg/bomb-scalable-vector-graphics-svg/
 	image and use the "Locate on Disk" option to show where the file is located on the computer. The user may also use the "About"
 	option to display information about the program and developers.
 	
-2. Errors: None that we know of
+2. Bugs: None that we know of
 
 3. Extra credit: Number 1 the splitter control, and Number 3 showing the images as they are loaded
 
