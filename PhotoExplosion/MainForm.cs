@@ -14,6 +14,7 @@ namespace PhotoExplosion
         private static string currentUser = Environment.UserName;
         private string currentDirectory = @"C:\Users\" + currentUser + @"\Pictures";
         private string rootDirectory = @"C:\Users\" + currentUser + @"\Pictures";
+        private bool rootChanged = false;
 
         public MainForm()
         {
@@ -108,6 +109,7 @@ namespace PhotoExplosion
             {
                 rootDirectory = folderBrowserDialog.SelectedPath;
                 currentDirectory = rootDirectory;
+                rootChanged = true;
                 //pass false as second parameter so images do not load
                 ListDirectory(treeView, false);
             }
@@ -120,14 +122,21 @@ namespace PhotoExplosion
 
         private void detailToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            photoList.View = View.Details;
+            if (!detailToolStripMenuItem.Checked)
+            {
+                //set list item to display the details view
+                photoList.View = View.Details;
+                smallToolStripMenuItem.Checked = false;
+                largeToolStripMenuItem.Checked = false;
+                detailToolStripMenuItem.Checked = true;
+            }
         }
 
         private void smallToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!smallToolStripMenuItem.Checked)
             {
-                //Set list items' imagelist to smallimagelist
+                //set list item to display the small view
                 photoList.View = View.SmallIcon;
                 smallToolStripMenuItem.Checked = true;
                 largeToolStripMenuItem.Checked = false;
@@ -139,7 +148,7 @@ namespace PhotoExplosion
         {
             if (!largeToolStripMenuItem.Checked)
             {
-                //Set list items' imagelist to largeimagelist
+                //set list item to display the large view
                 photoList.View = View.LargeIcon;
                 largeToolStripMenuItem.Checked = true;
                 smallToolStripMenuItem.Checked = false;
@@ -270,8 +279,10 @@ namespace PhotoExplosion
             if (IsClickOnText(treeView, e.Node, e.Location))
             {
                 //Display selected folder's images if it is not the current folder
-                if (!(Path.GetFullPath(e.Node.Tag.ToString()).Equals(Path.GetFullPath(currentDirectory))))
+                if (rootChanged || !(Path.GetFullPath(e.Node.Tag.ToString()).Equals(Path.GetFullPath(currentDirectory))))
                 {
+                    rootChanged = false;
+
                     //Cancel background worker if it is running
                     if (photoLoaderBW.IsBusy)
                         if (photoLoaderBW.WorkerSupportsCancellation)

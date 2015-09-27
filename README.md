@@ -11,17 +11,20 @@ http://clipartist.net/svg/bomb-scalable-vector-graphics-svg/
 	image and use the "Locate on Disk" option to show where the file is located on the computer. The user may also use the "About"
 	option to display information about the program and developers.
 	
-2. Errors: None
+2. Errors: None that we know of
 
-3. Extra credit: Number 1 the Splitter control, and Number 3 showing the images as they are loaded
+3. Extra credit: Number 1 the splitter control, and Number 3 showing the images as they are loaded
 
 4. 
-   Mallory: 
+   Mallory:
+	50% of the Main form's appearance and layout
 	Worked on the Edit Photo form 
 	About box
-	All of the functionality for editing the photos, saving them
-	The transformation progress box, etc.
-	50% of the Main form's appearance and layout
+	All of the functionality for editing the photos and saving them
+	The transformation progress box
+	Inverting the colors
+	Changing the color
+	Changing the brightness
 
    Ethan: 
 	50% of the Main form's appearance and layout
