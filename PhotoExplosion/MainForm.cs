@@ -14,6 +14,7 @@ namespace PhotoExplosion
         private static string currentUser = Environment.UserName;
         private string currentDirectory = @"C:\Users\" + currentUser + @"\Pictures";
         private string rootDirectory = @"C:\Users\" + currentUser + @"\Pictures";
+        //This boolean is used to determine if the root folder was just changed
         private bool rootChanged = false;
 
         public MainForm()
@@ -278,7 +279,8 @@ namespace PhotoExplosion
             //Was the click on the folder name?
             if (IsClickOnText(treeView, e.Node, e.Location))
             {
-                //Display selected folder's images if it is not the current folder
+                /* Display selected folder's images if it is not the current folder 
+                or if the root folder was selected after changing the root folder */
                 if (rootChanged || !(Path.GetFullPath(e.Node.Tag.ToString()).Equals(Path.GetFullPath(currentDirectory))))
                 {
                     rootChanged = false;
